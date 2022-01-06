@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Date from "../../components/date";
 import Layout from "../../components/layout";
-import utilStyles from "../../styles/utils.module.css";
 import Parse from "../../services/parse";
 import Image from "next/image";
 
@@ -12,6 +11,7 @@ export default function Post({ postData }) {
         <title>{postData.title}</title>
       </Head>
       <article>
+        <h1 className="text-3xl font-bold underline">VieFAM Post</h1>
         <Image src={postData.title} width={300} height={300} />
         {/* <div className={utilStyles.lightText}>
           <Date dateString={postData.date} />
@@ -34,19 +34,15 @@ export async function getStaticPaths() {
       id: p.id,
     },
   }));
-
-  console.log("Paths", paths);
-
   return {
     paths,
-    fallback: false, // explain later
+    fallback: true, // explain later
   };
 }
 
 export async function getStaticProps({ params }) {
   const query = new Parse.Query("Post");
   const post = await query.get(params.id);
-  console.log("Query", post.get("images")[0]);
   const postData = {
     title: post.get("images")[0],
   };
