@@ -4,7 +4,9 @@ import Layout from "../../components/layout";
 import Parse from "../../services/parse";
 
 export default function Sale({ saleData }) {
-  const { name, images, price } = saleData;
+  const name = (saleData && saleData.name) || "";
+  const images = (saleData && saleData.images) || [""];
+  const price = (saleData && saleData.price) || 0;
   return (
     <Layout>
       <Head>
@@ -61,12 +63,11 @@ export async function getStaticProps({ params }) {
       return { notFound: true };
     }
     const saleData = {
-      name: saleItem.get("name"),
+      name: saleItem.get("name") || "",
       images: saleItem.get("images"),
-      price: saleItem.get("price"),
+      price: saleItem.get("price") || 0,
     };
 
-    console.log("Sale Data", saleData);
     return {
       props: {
         saleData,

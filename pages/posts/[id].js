@@ -5,7 +5,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default function Post({ postData }) {
-  const { title, images } = postData;
+  const title = (postData && postData.title) || "";
+  const images = (postData && postData.images) || [""];
   const { isFallback } = useRouter();
 
   if (isFallback) return <h1>Loading</h1>;
@@ -26,9 +27,7 @@ export default function Post({ postData }) {
           </h1>
         </div>
         <div>
-          {postData.title && (
-            <Image src={postData.title} width={300} height={300} />
-          )}
+          <Image src={postData.title} width={300} height={300} />
         </div>
         <div>
           <a href="https://links.viefam.com/D2mSAd4HRiLB85gF7">Open in app</a>
@@ -61,18 +60,16 @@ export async function getStaticProps({ params }) {
       return { notFound: true };
     }
     const postData = {
-      title: post.get("images")[0],
+      title: post.get("images")[0] || "",
       dynamicLink: post.get("dynamicLink"),
       images: post.get("images"),
     };
-    console.log("Post Data", postData);
     return {
       props: {
         postData,
       },
     };
   } catch (error) {
-    console.log("Post", error);
     return {
       notFound: true,
     };
