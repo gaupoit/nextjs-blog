@@ -5,7 +5,7 @@ import styles from "./layout.module.css";
 import utilStyles from "../styles/utils.module.css";
 
 const name = "Thinhnp";
-export const siteTitle = "VieFAM Website";
+export const siteTitle = "VieFAM Deeplinks";
 
 export default function Layout({ children, home }) {
   return (
