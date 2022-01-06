@@ -1,30 +1,35 @@
 import Head from "next/head";
-import Date from "../../components/date";
 import Layout from "../../components/layout";
 import Parse from "../../services/parse";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default function Post({ postData }) {
+  const { title, images } = postData;
   const { isFallback } = useRouter();
 
   if (isFallback) return <h1>Loading</h1>;
   return (
     <Layout>
       <Head>
-        <title>Deeplink</title>
+        <title>{title}</title>
+        <meta charSet="utf-8" />
+        <meta property="og:image" content={images[0]} key="ogimage" />
+        <meta property="og:site_name" content="Chợ VieFAM" key="ogsitename" />
+        <meta property="og:title" content={title} key="ogtitle" />
+        <meta property="og:description" content={`Bài viết`} key="ogdesc" />
       </Head>
       <article>
-        <h1 className="text-3xl font-bold underline">
-          Testing Deeplink's Post
-        </h1>
-        {postData.title && (
-          <Image src={postData.title} width={300} height={300} />
-        )}
-        {/* <div className={utilStyles.lightText}>
-          <Date dateString={postData.date} />
+        <div>
+          <h1 className="text-3xl font-bold underline">
+            Testing Deeplink's Post
+          </h1>
         </div>
-        <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} /> */}
+        <div>
+          {postData.title && (
+            <Image src={postData.title} width={300} height={300} />
+          )}
+        </div>
         <div>
           <a href="https://links.viefam.com/D2mSAd4HRiLB85gF7">Open in app</a>
         </div>
@@ -56,8 +61,11 @@ export async function getStaticProps({ params }) {
       return { notFound: true };
     }
     const postData = {
-      title: post ? post.get("images")[0] : "Not found",
+      title: post.get("images")[0],
+      dynamicLink: post.get("dynamicLink"),
+      images: post.get("images"),
     };
+    console.log("Post Data", postData);
     return {
       props: {
         postData,
